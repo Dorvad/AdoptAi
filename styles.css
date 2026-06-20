@@ -811,6 +811,26 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
 .sc-intro__gets-label { font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sage-tint-2); margin: 4px 0 12px; }
 .sc-intro__areas { font-size: 13px; line-height: 1.5; color: var(--sage-tint-2); margin-top: 16px; }
 
+/* Intro "start" card + participant steps */
+.sc-start-card { display: flex; flex-direction: column; justify-content: center; }
+.sc-start-card__text { font-size: 14.5px; line-height: 1.6; color: var(--muted); margin-bottom: 22px; }
+.sc-participant { max-width: 560px; }
+.sc-participant__form { margin: 4px 0 8px; }
+.sc-participant .sc-field { margin-bottom: 6px; }
+.sc-input--lg { font-size: 18px; padding: 15px 16px; }
+.sc-select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 15px 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235F6B75' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 42px;
+}
+
 /* Form fields */
 .sc-field { margin-bottom: 16px; }
 .sc-label { display: block; font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }

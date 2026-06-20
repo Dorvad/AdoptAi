@@ -160,7 +160,7 @@
    * STATE
    * ------------------------------------------------------------------ */
   const state = {
-    participant: { name: "", role: "", org: "", email: "" },
+    participant: { name: "", role: "", companySize: "", email: "" },
     answers: {},        // { q1: 1..5 }
     step: 0,            // current section index (0..5) while answering
     result: null,       // computed result object
@@ -185,6 +185,7 @@
     }
   }
   function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function sizeLabel(s) { return !s ? "" : (s === "Just me" ? "Just me" : s + " people"); }
 
   function interpretSection(raw) {
     if (raw >= 18) return { label: "Strong area", tone: "strong" };
@@ -285,9 +286,8 @@
     }
   }
 
-  /* ---- View 1: Intro + participant info form ---- */
+  /* ---- View 1: Intro ---- */
   function renderIntro() {
-    const p = state.participant;
     const outcomes = [
       "Your readiness score and band — out of 120",
       "Your strongest area, and the one to fix first",
@@ -311,63 +311,97 @@
             '<p class="sc-intro__areas">Measured across six areas: ' + h(areas) + ".</p>" +
             '<p class="sc-privacy sc-privacy--light">No confidential information needed. Please don’t include sensitive employee, client, legal, or financial data in your answers.</p>' +
           "</div>" +
-          '<div class="sc-card sc-form-card">' +
-            '<h3 class="sc-form-card__title">Get your personalized result</h3>' +
-            '<form id="scParticipant" novalidate>' +
-              field("sc-name", "Name", "text", p.name, true, "So we can personalize your result") +
-              field("sc-role", "Role", "text", p.role, false, "e.g. L&D Lead, Manager, Consultant") +
-              field("sc-org", "Organization or team", "text", p.org, false, "") +
-              field("sc-email", "Email", "email", p.email, false, "Optional now — you can email your report at the end") +
-              '<p class="sc-error" id="scParticipantError" role="alert" hidden></p>' +
-              '<button type="submit" class="btn btn--primary btn--lg sc-block">Start my readiness check</button>' +
-              '<p class="sc-form-card__note">24 questions · rated 1 (not true) to 5 (very true) · about 5 minutes</p>' +
-            "</form>" +
+          '<div class="sc-card sc-form-card sc-start-card">' +
+            '<h3 class="sc-form-card__title">Ready when you are</h3>' +
+            '<p class="sc-start-card__text">A few quick details about you, then 24 short questions. It takes about five minutes — no login needed.</p>' +
+            '<button type="button" class="btn btn--primary btn--lg sc-block" id="scStart">Start my readiness check</button>' +
+            '<p class="sc-form-card__note">Free · Private to your browser</p>' +
           "</div>" +
         "</div>" +
       "</div>"
     );
 
-    const form = document.getElementById("scParticipant");
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const name = form.querySelector("#sc-name").value.trim();
-      const err = document.getElementById("scParticipantError");
-      const email = form.querySelector("#sc-email").value.trim();
-      if (!name) {
-        err.textContent = "Please add a name so we can personalize your result.";
-        err.hidden = false;
-        form.querySelector("#sc-name").focus();
-        return;
-      }
-      if (email && !validEmail(email)) {
-        err.textContent = "That email address doesn’t look right. You can also leave it blank.";
-        err.hidden = false;
-        form.querySelector("#sc-email").focus();
-        return;
-      }
-      state.participant = {
-        name: name,
-        role: form.querySelector("#sc-role").value.trim(),
-        org: form.querySelector("#sc-org").value.trim(),
-        email: email
-      };
-      state.step = 0;
-      renderQuestions(0);
+    document.getElementById("scStart").addEventListener("click", function () {
+      renderParticipantStep(0);
       scrollToTop();
     });
   }
 
-  function field(id, label, type, value, required, help) {
-    return (
-      '<div class="sc-field">' +
-        '<label class="sc-label" for="' + id + '">' + h(label) +
-          (required ? '<span class="sc-req" aria-hidden="true"> *</span>' : ' <span class="sc-optional">(optional)</span>') +
-        "</label>" +
-        '<input class="sc-input" id="' + id + '" name="' + id + '" type="' + type + '" value="' + h(value) + '"' +
-          (required ? " required" : "") + (help ? ' aria-describedby="' + id + '-help"' : "") + ' autocomplete="off">' +
-        (help ? '<span class="sc-help" id="' + id + '-help">' + h(help) + "</span>" : "") +
+  /* ---- View 2: Participant details (one field per step) ---- */
+  const participantSteps = [
+    { key: "name", title: "First, what should we call you?", help: "We use your name to personalize the result.", type: "text", placeholder: "Your name", required: true, autocomplete: "name" },
+    { key: "role", title: "What’s your role?", help: "So we can frame the recommendations for you.", type: "text", placeholder: "e.g. L&D Lead, Manager, Consultant", required: false, autocomplete: "organization-title" },
+    { key: "companySize", title: "How big is your team or company?", help: "This helps us interpret your readiness.", type: "select", options: ["Just me", "2–10", "11–50", "51–200", "201–1,000", "1,000+"], required: false }
+  ];
+
+  function renderParticipantStep(index) {
+    const def = participantSteps[index];
+    const total = participantSteps.length;
+    const current = state.participant[def.key] || "";
+    const pct = Math.round(((index + 1) / total) * 100);
+
+    let control;
+    if (def.type === "select") {
+      control =
+        '<select class="sc-input sc-select" id="scPField" aria-label="' + h(def.title) + '" aria-describedby="scPHelp">' +
+          '<option value="" disabled' + (current ? "" : " selected") + ">Select an option…</option>" +
+          def.options.map(function (o) {
+            return "<option" + (o === current ? " selected" : "") + ">" + h(o) + "</option>";
+          }).join("") +
+        "</select>";
+    } else {
+      control =
+        '<input class="sc-input sc-input--lg" id="scPField" type="' + def.type + '" value="' + h(current) + '"' +
+          ' placeholder="' + h(def.placeholder || "") + '" aria-label="' + h(def.title) + '" aria-describedby="scPHelp"' +
+          ' autocomplete="' + (def.autocomplete || "off") + '"' + (def.required ? " required" : "") + ">";
+    }
+
+    setView(
+      '<div class="sc-view sc-quiz sc-participant">' +
+        '<div class="sc-quiz__head">' +
+          '<div class="sc-quiz__meta">' +
+            '<span class="eyebrow">About you</span>' +
+            '<span class="sc-quiz__count">Step ' + (index + 1) + " of " + total + "</span>" +
+          "</div>" +
+          '<h2 class="section-title sc-quiz__title" id="scStepTitle">' + h(def.title) + "</h2>" +
+          '<div class="meter sc-quiz__progress"><div class="meter__track"><div class="meter__fill" style="--val:' + pct + '%"></div></div></div>' +
+        "</div>" +
+        '<form id="scPForm" class="sc-participant__form" novalidate>' +
+          '<div class="sc-field">' + control + '<span class="sc-help" id="scPHelp">' + h(def.help) + "</span></div>" +
+          '<p class="sc-error" id="scPError" role="alert" hidden></p>' +
+        "</form>" +
+        '<div class="sc-quiz__nav">' +
+          '<button type="button" class="btn btn--ghost" id="scPBack">Back</button>' +
+          '<button type="button" class="btn btn--primary" id="scPNext">' + (index === total - 1 ? "Start the questions" : "Continue") + "</button>" +
+        "</div>" +
+        '<p class="sc-privacy">No confidential or personal data is needed — just enough to personalize your result.</p>' +
       "</div>"
     );
+
+    const fieldEl = document.getElementById("scPField");
+    function save() { state.participant[def.key] = (fieldEl.value || "").trim(); }
+    function next() {
+      if (def.required && !(fieldEl.value || "").trim()) {
+        const err = document.getElementById("scPError");
+        err.textContent = "Please add your name to continue.";
+        err.hidden = false;
+        fieldEl.focus();
+        return;
+      }
+      save();
+      if (index === total - 1) { renderQuestions(0); } else { renderParticipantStep(index + 1); }
+      scrollToTop();
+    }
+
+    document.getElementById("scPForm").addEventListener("submit", function (e) { e.preventDefault(); next(); });
+    document.getElementById("scPNext").addEventListener("click", next);
+    document.getElementById("scPBack").addEventListener("click", function () {
+      save();
+      if (index === 0) { renderIntro(); } else { renderParticipantStep(index - 1); }
+      scrollToTop();
+    });
+
+    fieldEl.focus();
   }
 
   /* ---- View 2: Multi-step questions ---- */
@@ -417,7 +451,8 @@
     });
 
     document.getElementById("scBack").addEventListener("click", function () {
-      if (stepIndex === 0) { renderIntro(); } else { renderQuestions(stepIndex - 1); }
+      if (stepIndex === 0) { renderParticipantStep(participantSteps.length - 1); }
+      else { renderQuestions(stepIndex - 1); }
       scrollToTop();
     });
     document.getElementById("scNext").addEventListener("click", function () {
@@ -496,7 +531,7 @@
     const pct = r.total / 120;
     const offset = circumference * (1 - pct);
 
-    const whoLine = [p.role, p.org].filter(Boolean).join(" · ");
+    const whoLine = [p.role, sizeLabel(p.companySize)].filter(Boolean).join(" · ");
 
     const breakdown = r.sectionScores.map(function (s) {
       const warn = s.tone === "needs" ? " meter__fill--warn" : "";
@@ -657,7 +692,7 @@
   function buildResultPayload(email, consent) {
     const r = state.result, p = state.participant;
     return {
-      name: p.name, role: p.role, org: p.org, email: email, consent: consent, date: r.date,
+      name: p.name, role: p.role, companySize: p.companySize, email: email, consent: consent, date: r.date,
       total: r.total,
       band: { title: r.band.title, description: r.band.description },
       sections: r.sectionScores.map(function (s) {
@@ -857,7 +892,7 @@
     y = 48;
 
     // Participant line
-    const who = [p.name, p.role, p.org].filter(Boolean).join("  ·  ");
+    const who = [p.name, p.role, sizeLabel(p.companySize)].filter(Boolean).join("  ·  ");
     text(who || p.name, M, 12, INK, "bold", pageW - M * 2);
     text(r.date, M, 10, MUTED, "normal");
     y += 3;
@@ -970,7 +1005,7 @@
       "footer{margin-top:32px;border-top:1px solid #DEDAD2;padding-top:12px;color:#5F6B75;font-size:12px}</style></head><body>" +
       "<p style='letter-spacing:.12em;text-transform:uppercase;color:#315C54;font-weight:700;font-size:12px'>AiDopt</p>" +
       "<h1>AI Adoption Readiness Report</h1>" +
-      "<p>" + h([p.name, p.role, p.org].filter(Boolean).join(" · ")) + "<br>" + h(r.date) + "</p>" +
+      "<p>" + h([p.name, p.role, sizeLabel(p.companySize)].filter(Boolean).join(" · ")) + "<br>" + h(r.date) + "</p>" +
       "<p class='total'>" + r.total + " / 120</p><p class='band'>" + h(r.band.title) + "</p><p>" + h(r.band.description) + "</p>" +
       "<h2>Section breakdown</h2><table>" + rows + "</table>" +
       "<h2>Strongest area</h2><p>" + h(r.strongest.title) + " (" + r.strongest.raw + " / 20)</p>" +

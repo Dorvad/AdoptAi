@@ -122,7 +122,8 @@ function buildEmailHtml(d) {
         LINE = "#DEDAD2", CREAM = "#F8F6F1", SOFT = "#E7EFEA";
 
   const name = esc(d.name || "there");
-  const who = [d.role, d.org].filter(Boolean).map(esc).join(" &middot; ");
+  const sizeText = d.companySize ? (d.companySize === "Just me" ? "Just me" : d.companySize + " people") : "";
+  const who = [d.role, sizeText].filter(Boolean).map(esc).join(" &middot; ");
   const date = esc(d.date || "");
   const total = Number(d.total) || 0;
   const bandTitle = esc((d.band && d.band.title) || "");
@@ -243,7 +244,7 @@ function buildLeadHtml(d, email) {
   const rows = [
     ["Name", d.name],
     ["Role", d.role],
-    ["Organization / team", d.org],
+    ["Company size", d.companySize],
     ["Email", email],
     ["Total", (Number(d.total) || 0) + " / 120"],
     ["Band", d.band && d.band.title],

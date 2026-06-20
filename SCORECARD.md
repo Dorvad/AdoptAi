@@ -22,7 +22,8 @@ anchor is preserved, so existing CTAs still point to it.
 
 ## User flow
 
-Intro + participant form → 6 steps of 4 questions (1–5 scale) → result report
+Intro → participant steps (name → role → company size) → 6 steps of 4 questions
+(1–5 scale) → result report
 (score ring, band, section breakdown, strongest/weakest, recommended next step,
 email capture, optional PDF export, kit CTA).
 
@@ -165,7 +166,7 @@ print-friendly window (`printableFallback`). To remove the CDN dependency, vendo
 
 ## Privacy
 
-The tool only asks for name/role/team/email and 1–5 ratings — no confidential
+The tool only asks for name, role, company size, optional email, and 1–5 ratings — no confidential
 information. Privacy notes appear on the intro, the question steps, and the result
 page. Answers stay in the browser unless the user submits the optional email form,
 in which case the result is sent to the `send-result` function and on to Resend
