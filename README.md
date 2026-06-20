@@ -1,7 +1,7 @@
 # AI Adoption Workshop Kit — Landing Page
 
 A standalone, responsive marketing landing page for the **AI Adoption Workshop Kit**
-by Workflow Adoption Lab.
+by AiDopt.
 
 This page was rebuilt from a Canva document export into clean, production-grade
 HTML, CSS, and vanilla JavaScript — no build step, no framework, no dependencies.

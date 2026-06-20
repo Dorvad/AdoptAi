@@ -114,7 +114,7 @@ The client endpoint is the `RESULT_API_ENDPOINT` constant at the top of
    variables):
    - `RESEND_API_KEY` — your `re_...` key *(required)*
    - `RESEND_FROM` — verified sender, e.g.
-     `Workflow Adoption Lab <reports@yourdomain.com>` *(required)*
+     `AiDopt <reports@yourdomain.com>` *(required)*
    - `RESEND_REPLY_TO` — optional reply-to address
    - `RESEND_ADMIN_TO` — optional, comma-separated address(es) to receive a lead
      notification for each submission
