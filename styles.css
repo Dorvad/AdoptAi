@@ -165,18 +165,22 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
 .btn--lg { padding: 15px 26px; font-size: 16px; }
 
 /* ---- Brand ---- */
-.brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; }
-.brand-mark {
-  width: 26px; height: 26px;
-  border: 1.5px solid var(--sage);
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand-logo { width: auto; height: 30px; color: var(--sage); display: block; flex: none; }
+.brand-text { display: inline-flex; flex-direction: column; line-height: 1.05; }
+.brand-tagline {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-top: 3px;
 }
-.brand-mark__dot { width: 9px; height: 9px; background: var(--sage); border-radius: 2px; }
 .brand-name {
   font-family: var(--font-head);
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
   letter-spacing: -0.01em;
   color: var(--ink);
 }
@@ -694,7 +698,7 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
   gap: 16px;
   padding-block: 36px;
 }
-.brand-mark--sm { width: 22px; height: 22px; }
+.site-footer .brand-logo { height: 32px; }
 .footer__note { font-size: 13px; color: var(--muted); }
 
 /* ---- Reveal on scroll ---- */
