@@ -585,6 +585,31 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
   display: flex; align-items: baseline; gap: 8px;
 }
 .plan__price-note { font-family: var(--font-body); font-size: 14px; font-weight: 400; color: var(--muted); }
+
+/* Launch pricing */
+.plan__price-label {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 4px;
+}
+.plan--featured .plan__price-label { color: var(--amber); }
+.launch-price { font: inherit; color: var(--ink); }
+.plan__price { margin-bottom: 4px; }
+.plan__regular {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.original-price {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  color: var(--muted);
+  font-weight: 600;
+}
 .plan__features { display: flex; flex-direction: column; gap: 11px; margin-bottom: 28px; flex: 1; }
 .plan__features li {
   position: relative;
