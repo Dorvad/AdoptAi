@@ -114,6 +114,61 @@
     hero.addEventListener("mouseleave", reset);
   }
 
+  /* ---- Hero: sparkles on "real work habits" --------------------------
+     Vanilla port of the SparklesText component. Twinkling SVG stars are
+     scattered over the phrase; each respawns at a new spot when its
+     lifespan runs out. Uses the brand palette (amber + sage) rather than
+     the component's default purple/pink, and is skipped under reduced
+     motion. The text itself stays part of the gradient headline. */
+  (function initSparkles() {
+    const container = document.getElementById("heroSparkles");
+    if (!container || prefersReduced) return;
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const STAR_PATH = "M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z";
+    const COLORS = ["#C9904A", "#315C54"]; // amber, sage
+    const COUNT = 11;
+
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+
+    function reset(s) {
+      s.lifespan = rand(5, 15);
+      s.el.style.left = rand(0, 100) + "%";
+      s.el.style.top = rand(0, 100) + "%";
+      s.el.style.setProperty("--sp-scale", rand(0.4, 1.1).toFixed(2));
+      s.el.style.animationDelay = rand(0, 2).toFixed(2) + "s";
+      s.path.setAttribute("fill", Math.random() > 0.5 ? COLORS[0] : COLORS[1]);
+    }
+
+    function make() {
+      const el = document.createElementNS(SVG_NS, "svg");
+      el.setAttribute("class", "sparkle");
+      el.setAttribute("viewBox", "0 0 21 21");
+      el.setAttribute("width", "18");
+      el.setAttribute("height", "18");
+      el.setAttribute("aria-hidden", "true");
+      el.setAttribute("focusable", "false");
+      const path = document.createElementNS(SVG_NS, "path");
+      path.setAttribute("d", STAR_PATH);
+      el.appendChild(path);
+      container.appendChild(el);
+      const s = { el: el, path: path, lifespan: 0 };
+      reset(s);
+      return s;
+    }
+
+    const sparkles = [];
+    for (let i = 0; i < COUNT; i++) sparkles.push(make());
+
+    // Tick lifespans; respawn (reposition) expired sparkles, like the original.
+    setInterval(function () {
+      sparkles.forEach(function (s) {
+        s.lifespan -= 0.1;
+        if (s.lifespan <= 0) reset(s);
+      });
+    }, 100);
+  })();
+
   /* ---- Reveal on scroll ----------------------------------------------- */
   const revealEls = Array.from(document.querySelectorAll(".reveal"));
   revealEls.forEach(function (el) {

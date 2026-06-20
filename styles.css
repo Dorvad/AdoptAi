@@ -304,6 +304,21 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
   border-radius: 50%;
 }
 
+/* Sparkles on "real work habits" (vanilla SparklesText) */
+.sparkles { position: relative; display: inline-block; white-space: nowrap; }
+.sparkle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  transform: scale(0) rotate(75deg);
+  animation: sparkleTwinkle 0.8s infinite ease-in-out;
+}
+@keyframes sparkleTwinkle {
+  0%   { opacity: 0; transform: scale(0) rotate(75deg); }
+  50%  { opacity: 1; transform: scale(var(--sp-scale, 1)) rotate(120deg); }
+  100% { opacity: 0; transform: scale(0) rotate(150deg); }
+}
+
 /* Soft glow behind the headline */
 .hero__glow {
   position: absolute;
@@ -673,6 +688,7 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
   .float-chip__repel { transition: none; }
   .sc-fade { animation: none; }
   .sc-ring__fg { transition: none; }
+  .sparkle { display: none; }
 }
 
 /* =====================================================================
