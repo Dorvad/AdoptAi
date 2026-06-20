@@ -298,24 +298,28 @@
       return '<li><span class="sc-tick" aria-hidden="true"></span>' + h(o) + "</li>";
     }).join("");
     const areas = sections.map(function (s) { return s.title; }).join(" · ");
+    const chips = ["100% free", "No sign-up", "About 5 minutes", "Private to your browser"]
+      .map(function (c) { return '<span class="sc-chip">' + h(c) + "</span>"; }).join("");
 
     setView(
       '<div class="sc-view">' +
         '<div class="cta-panel sc-intro">' +
           '<div class="cta-panel__copy">' +
-            '<span class="eyebrow eyebrow--accent">Free · 5 minutes · No login</span>' +
+            '<span class="eyebrow eyebrow--accent">Free AI readiness scorecard</span>' +
             '<h2 class="cta-panel__title">How ready is your team to make AI a habit?</h2>' +
-            '<p class="cta-panel__body">Most teams have already tried AI. Far fewer have turned it into dependable, everyday work habits. Answer 24 quick statements and find out exactly where your team stands — and the single most useful thing to do next.</p>' +
-            '<p class="sc-intro__gets-label">What you’ll get</p>' +
+            '<p class="cta-panel__body">Most teams have tried AI. Far fewer have turned it into dependable, everyday habits. Answer 24 quick questions and get a personalized readiness score, your biggest gap, and a clear next step — completely free, no sign-up.</p>' +
+            '<div class="sc-trust">' + chips + "</div>" +
+            '<p class="sc-intro__gets-label">What you’ll get, free</p>' +
             '<ul class="sc-intro__list">' + outcomeList + "</ul>" +
             '<p class="sc-intro__areas">Measured across six areas: ' + h(areas) + ".</p>" +
             '<p class="sc-privacy sc-privacy--light">No confidential information needed. Please don’t include sensitive employee, client, legal, or financial data in your answers.</p>' +
           "</div>" +
-          '<div class="sc-card sc-form-card sc-start-card">' +
-            '<h3 class="sc-form-card__title">Ready when you are</h3>' +
-            '<p class="sc-start-card__text">A few quick details about you, then 24 short questions. It takes about five minutes — no login needed.</p>' +
-            '<button type="button" class="btn btn--primary btn--lg sc-block" id="scStart">Start my readiness check</button>' +
-            '<p class="sc-form-card__note">Free · Private to your browser</p>' +
+          '<div class="sc-card sc-start-card">' +
+            '<span class="sc-start-card__badge">No card · No sign-up</span>' +
+            '<div class="sc-start-card__free">Free</div>' +
+            '<p class="sc-start-card__sub">See your full, personalized result the moment you finish. Emailing or downloading it is optional — the result itself is always free.</p>' +
+            '<button type="button" class="btn btn--primary btn--lg sc-block" id="scStart">Start the free scorecard</button>' +
+            '<p class="sc-form-card__note">About 5 minutes · Your answers stay in your browser</p>' +
           "</div>" +
         "</div>" +
       "</div>"

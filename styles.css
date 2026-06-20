@@ -811,9 +811,32 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
 .sc-intro__gets-label { font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sage-tint-2); margin: 4px 0 12px; }
 .sc-intro__areas { font-size: 13px; line-height: 1.5; color: var(--sage-tint-2); margin-top: 16px; }
 
-/* Intro "start" card + participant steps */
-.sc-start-card { display: flex; flex-direction: column; justify-content: center; }
-.sc-start-card__text { font-size: 14.5px; line-height: 1.6; color: var(--muted); margin-bottom: 22px; }
+/* Trust chips (communicate "free" + low friction on the sage intro panel) */
+.sc-trust { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 22px; }
+.sc-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-head); font-size: 12px; font-weight: 600;
+  color: #fff; background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 12px; border-radius: 999px;
+}
+.sc-chip::before { content: "✓"; color: var(--amber); font-weight: 800; font-size: 11px; }
+
+/* Intro "free" start card + participant steps */
+.sc-start-card { display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.sc-start-card__badge {
+  align-self: center;
+  font-family: var(--font-head); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sage); background: var(--sage-soft);
+  padding: 6px 14px; border-radius: 999px; margin-bottom: 18px;
+}
+.sc-start-card__free {
+  font-family: var(--font-head); font-weight: 800; font-size: 52px; line-height: 1;
+  letter-spacing: -0.02em; color: var(--sage); margin-bottom: 12px;
+}
+.sc-start-card__sub { font-size: 14.5px; line-height: 1.6; color: var(--muted); margin-bottom: 22px; }
+.sc-start-card .sc-form-card__note { margin-top: 14px; }
 .sc-participant { max-width: 560px; }
 .sc-participant__form { margin: 4px 0 8px; }
 .sc-participant .sc-field { margin-bottom: 6px; }
