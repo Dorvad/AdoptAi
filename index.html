@@ -380,42 +380,22 @@
       </div>
     </section>
 
-    <!-- ===== SCORECARD ===== -->
+    <!-- ===== SCORECARD (interactive) ===== -->
+    <!-- The AI Adoption Readiness Scorecard renders into #scorecardApp via
+         scorecard.js (progressive enhancement). See SCORECARD.md for docs. -->
     <section class="section" id="scorecard">
       <div class="container">
-        <div class="cta-panel reveal">
-          <div class="cta-panel__copy">
-            <span class="eyebrow eyebrow--accent">Free download</span>
-            <h2 class="cta-panel__title">Start with the free AI Adoption Scorecard</h2>
-            <p class="cta-panel__body">Baseline where your team stands today across six dimensions of practical, responsible AI use — no kit purchase required.</p>
-            <a href="#scorecard" class="btn btn--light btn--lg">Download the free scorecard</a>
-          </div>
-          <div class="scorecard">
-            <div class="micro-label">Adoption Scorecard</div>
-            <div class="scorecard__rows">
-              <div class="meter">
-                <div class="meter__head"><span>Daily use</span><span>4 / 5</span></div>
-                <div class="meter__track"><div class="meter__fill" style="--val:80%"></div></div>
-              </div>
-              <div class="meter">
-                <div class="meter__head"><span>Workflow integration</span><span>3 / 5</span></div>
-                <div class="meter__track"><div class="meter__fill" style="--val:60%"></div></div>
-              </div>
-              <div class="meter">
-                <div class="meter__head"><span>Responsible use</span><span>5 / 5</span></div>
-                <div class="meter__track"><div class="meter__fill" style="--val:100%"></div></div>
-              </div>
-              <div class="meter">
-                <div class="meter__head"><span>Shared standards</span><span>2 / 5</span></div>
-                <div class="meter__track"><div class="meter__fill meter__fill--warn" style="--val:40%"></div></div>
-              </div>
-            </div>
-            <div class="scorecard__foot">
-              <span>Overall</span>
-              <span class="scorecard__score">3.5 / 5</span>
+        <div id="scorecardApp" aria-live="polite"></div>
+        <noscript>
+          <div class="cta-panel">
+            <div class="cta-panel__copy">
+              <span class="eyebrow eyebrow--accent">Free interactive tool</span>
+              <h2 class="cta-panel__title">AI Adoption Readiness Scorecard</h2>
+              <p class="cta-panel__body">This 24-question scorecard needs JavaScript to run. Please enable it, or get the full kit to run the conversation with your team.</p>
+              <a href="#pricing" class="btn btn--light btn--lg">See the workshop kit</a>
             </div>
           </div>
-        </div>
+        </noscript>
       </div>
     </section>
 
@@ -562,5 +542,11 @@
   </footer>
 
   <script src="script.js"></script>
+
+  <!-- jsPDF for the personalized PDF report (optional export).
+       Loaded async; the export gracefully falls back to the print dialog
+       if the library is unavailable. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+  <script src="scorecard.js" defer></script>
 </body>
 </html>

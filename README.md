@@ -12,7 +12,8 @@ HTML, CSS, and vanilla JavaScript — no build step, no framework, no dependenci
 |------|---------|
 | `index.html` | Semantic page markup and all copy |
 | `styles.css` | Design-token system, layout, components, responsive rules |
-| `script.js`  | FAQ accordion, mobile navigation, scroll-reveal animations |
+| `script.js`  | FAQ accordion, mobile navigation, hero floating icons, scroll-reveal animations |
+| `scorecard.js` | Interactive AI Adoption Readiness Scorecard (see `SCORECARD.md`) |
 
 ## Running locally
 
@@ -43,4 +44,13 @@ python3 -m http.server 8000
 ## Sections
 
 Navigation · Hero · The adoption gap · The adoption path · What's inside ·
-How it works · Who it's for · Free scorecard · Pricing · FAQ · Final CTA · Footer
+How it works · Who it's for · **AI Adoption Readiness Scorecard** · Pricing ·
+FAQ · Final CTA · Footer
+
+## Interactive scorecard
+
+The `#scorecard` section is a 24-question interactive readiness scorecard with a
+personalized result report, section breakdown, recommended next step, optional
+email capture, an optional (mock) rewarded-ad-gated PDF export, and a kit CTA.
+Full developer notes — scoring, editing questions, the kit link, replacing the
+mock ad, and connecting an email provider — are in **`SCORECARD.md`**.
