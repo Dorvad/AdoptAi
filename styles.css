@@ -599,6 +599,33 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
 }
 .plan__cta { width: 100%; }
 
+/* Pricing motion — brand port of the pricing-blocks component:
+   staggered spring-style entrance + hover lift, with a scaled-up
+   featured card on desktop. Entrance uses the `translate` property so it
+   composes with the hover/featured `scale` instead of fighting it. */
+.pricing.reveal { opacity: 1; transform: none; } /* wrapper is only the scroll trigger; cards animate individually */
+.plan { position: relative; }
+.pricing .plan {
+  opacity: 0;
+  translate: 0 40px;
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    translate 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    scale 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+.pricing.is-visible .plan { opacity: 1; translate: 0 0; }
+.pricing.is-visible .plan:nth-child(2) { transition-delay: 0.1s, 0.1s, 0s, 0s, 0s; }
+.pricing.is-visible .plan:nth-child(3) { transition-delay: 0.2s, 0.2s, 0s, 0s, 0s; }
+.plan:hover { scale: 1.03; z-index: 3; box-shadow: var(--shadow-soft); border-color: #cfcabf; }
+.plan--featured:hover { box-shadow: var(--shadow-card); border-color: var(--sage); }
+
+@media (min-width: 961px) {
+  .plan--featured { scale: 1.05; z-index: 2; }
+  .plan--featured:hover { scale: 1.08; }
+}
+
 /* ---- FAQ ---- */
 .faq { border-top: 1px solid var(--line); }
 .faq__item { border-bottom: 1px solid var(--line); }
@@ -689,6 +716,8 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
   .sc-fade { animation: none; }
   .sc-ring__fg { transition: none; }
   .sparkle { display: none; }
+  .pricing .plan { opacity: 1 !important; translate: 0 !important; transition: none !important; }
+  .plan, .plan:hover, .plan--featured, .plan--featured:hover { scale: 1 !important; }
 }
 
 /* =====================================================================
