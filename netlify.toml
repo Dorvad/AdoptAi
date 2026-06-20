@@ -1,0 +1,20 @@
+# Netlify configuration for the AI Adoption Workshop Kit landing page.
+# Static site served from the repo root, with serverless functions in
+# netlify/functions. The scorecard's result email is sent by the
+# "send-result" function (see netlify/functions/send-result.js and
+# SCORECARD.md → "Email delivery with Resend").
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  # Functions use the global fetch, so Node 18+ is required.
+  node_bundler = "esbuild"
+
+# Optional friendly alias: POST /api/send-result -> the function.
+# (The scorecard calls /.netlify/functions/send-result directly by default.)
+[[redirects]]
+  from = "/api/send-result"
+  to = "/.netlify/functions/send-result"
+  status = 200

@@ -51,6 +51,7 @@ FAQ · Final CTA · Footer
 
 The `#scorecard` section is a 24-question interactive readiness scorecard with a
 personalized result report, section breakdown, recommended next step, optional
-email capture, an optional (mock) rewarded-ad-gated PDF export, and a kit CTA.
+email capture (the result is emailed via **Resend** through a Netlify Function),
+an optional (mock) rewarded-ad-gated PDF export, and a kit CTA.
 Full developer notes — scoring, editing questions, the kit link, replacing the
-mock ad, and connecting an email provider — are in **`SCORECARD.md`**.
+mock ad, and the Resend + Netlify email setup — are in **`SCORECARD.md`**.

@@ -12,6 +12,8 @@ the existing design tokens and components (`.btn`, `.card`, `.meter`, `.eyebrow`
 | `index.html` | Mount point: `<section id="scorecard">` → `<div id="scorecardApp">` (with a `<noscript>` fallback). Loads jsPDF (CDN) and `scorecard.js`. |
 | `scorecard.js` | All data, scoring, views, PDF export, mock ad unlock, email capture. |
 | `styles.css` | Scorecard styles live under the "AI Adoption Readiness Scorecard" heading; responsive rules are in the existing media queries. |
+| `netlify/functions/send-result.js` | Serverless function that emails the result via Resend (holds the API key). |
+| `netlify.toml` | Netlify build/functions config. |
 
 The scorecard sits after the value-proposition sections and before the pricing
 section, so the natural flow is: explore the offer → measure readiness → see the
@@ -82,13 +84,77 @@ result is **never** blocked.
   button, and do not block the basic result.
 - The modal copy and flow (`openPdfUnlockModal`) can stay as-is.
 
-## How to connect an email provider later
+## Email delivery with Resend (Netlify)
 
-Email capture on the result page currently stores the submission in local state
-and shows a success message. Search `scorecard.js` for the `TODO (production)`
-comment in `wireEmailCapture()` and POST `{ participant, result, email }` to your
-provider (Beehiiv, MailerLite, ConvertKit, …) — ideally via a serverless endpoint
-so API keys are never exposed in client-side code.
+When a user submits the email form on the result page, the scorecard POSTs the
+result JSON to a **Netlify Function** (`netlify/functions/send-result.js`), which
+sends a branded report through **Resend**.
+
+> Resend (like any email API) requires a **secret API key**. It must live on the
+> server, never in the browser — that is the whole reason for the function.
+
+**Architecture**
+
+```
+scorecard.js  ──POST result JSON──▶  /.netlify/functions/send-result  ──▶  Resend API  ──▶  inbox
+(browser)                            (holds RESEND_API_KEY)
+```
+
+The client endpoint is the `RESULT_API_ENDPOINT` constant at the top of
+`scorecard.js` (default `"/.netlify/functions/send-result"`).
+
+### One-time setup
+
+1. **Create a Resend account** at resend.com and **verify a sending domain**
+   (Resend → Domains → add your domain and the DNS records). Until a domain is
+   verified you can only test by sending to your own address from
+   `onboarding@resend.dev`.
+2. **Create an API key** (Resend → API Keys). It starts with `re_`.
+3. **Add environment variables** in Netlify (Site settings → Environment
+   variables):
+   - `RESEND_API_KEY` — your `re_...` key *(required)*
+   - `RESEND_FROM` — verified sender, e.g.
+     `Workflow Adoption Lab <reports@yourdomain.com>` *(required)*
+   - `RESEND_REPLY_TO` — optional reply-to address
+   - `RESEND_ADMIN_TO` — optional, comma-separated address(es) to receive a lead
+     notification for each submission
+4. **Deploy.** `netlify.toml` already points `functions = "netlify/functions"`.
+   The function uses the global `fetch`, so it needs **Node 18+** (Netlify's
+   default) and **no npm dependencies**.
+
+### Test locally
+
+```bash
+npm i -g netlify-cli
+netlify dev            # serves the site + functions, injects env vars
+```
+
+Without `netlify dev` (e.g. opening the file directly or a plain static server),
+the email request will fail gracefully — the form shows a "couldn't send" message
+and the rest of the result page keeps working.
+
+### Notes
+
+- The email HTML is built **server-side** in `buildEmailHtml()`; all user-supplied
+  fields are HTML-escaped.
+- The optional admin/lead email is best-effort and never blocks the user's
+  confirmation.
+- Prefer **Resend's REST API via `fetch`** (used here) to avoid a build step. If
+  you'd rather use the official SDK, `npm i resend`, add a `package.json`, and
+  replace `resendSend()` with `new Resend(process.env.RESEND_API_KEY).emails.send(...)`.
+
+### Other hosts
+
+The function is plain logic over `fetch`, so it ports easily:
+
+| Host | File location | Endpoint to set in `RESULT_API_ENDPOINT` |
+|------|---------------|------------------------------------------|
+| Netlify (current) | `netlify/functions/send-result.js` | `/.netlify/functions/send-result` |
+| Vercel | `api/send-result.js` (export `default (req,res)`) | `/api/send-result` |
+| Cloudflare Pages | `functions/api/send-result.js` (export `onRequestPost`) | `/api/send-result` |
+
+Keep the validation, escaping, and the Resend `fetch` call; only the
+request/response wrapper changes per platform.
 
 ## PDF export
 
@@ -101,7 +167,9 @@ print-friendly window (`printableFallback`). To remove the CDN dependency, vendo
 
 The tool only asks for name/role/team/email and 1–5 ratings — no confidential
 information. Privacy notes appear on the intro, the question steps, and the result
-page. Answers stay in the browser unless the user submits the optional email form.
+page. Answers stay in the browser unless the user submits the optional email form,
+in which case the result is sent to the `send-result` function and on to Resend
+with the user's explicit consent (consent is required server-side too).
 
 ## Accessibility
 

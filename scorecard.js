@@ -19,6 +19,11 @@
   // Replace with the real checkout/landing URL when available.
   const KIT_CTA_URL = "https://example.com/kit";
 
+  // Serverless endpoint that emails the result via Resend.
+  // This is the default path for a Netlify Function named "send-result".
+  // (See SCORECARD.md → "Email delivery with Resend".)
+  const RESULT_API_ENDPOINT = "/.netlify/functions/send-result";
+
   /* ------------------------------------------------------------------ *
    * DATA
    * ------------------------------------------------------------------ */
@@ -283,30 +288,39 @@
   /* ---- View 1: Intro + participant info form ---- */
   function renderIntro() {
     const p = state.participant;
-    const sectionList = sections.map(function (s) {
-      return '<li><span class="sc-tick" aria-hidden="true"></span>' + h(s.title) + "</li>";
+    const outcomes = [
+      "Your readiness score and band — out of 120",
+      "Your strongest area, and the one to fix first",
+      "A recommended next step and a first experiment to try",
+      "An optional report you can email or share with your team"
+    ];
+    const outcomeList = outcomes.map(function (o) {
+      return '<li><span class="sc-tick" aria-hidden="true"></span>' + h(o) + "</li>";
     }).join("");
+    const areas = sections.map(function (s) { return s.title; }).join(" · ");
 
     setView(
       '<div class="sc-view">' +
         '<div class="cta-panel sc-intro">' +
           '<div class="cta-panel__copy">' +
-            '<span class="eyebrow eyebrow--accent">Free interactive tool · ~5 minutes</span>' +
-            '<h2 class="cta-panel__title">AI Adoption Readiness Scorecard</h2>' +
-            '<p class="cta-panel__body">Find out whether your team is ready to turn AI experimentation into real work habits. Answer 24 short statements across six areas and get a personalized readiness result with a recommended next step.</p>' +
-            '<ul class="sc-intro__list">' + sectionList + "</ul>" +
-            '<p class="sc-privacy sc-privacy--light">We do not ask for confidential information. Please don’t include sensitive employee, client, legal, financial, or personal data in your answers.</p>' +
+            '<span class="eyebrow eyebrow--accent">Free · 5 minutes · No login</span>' +
+            '<h2 class="cta-panel__title">How ready is your team to make AI a habit?</h2>' +
+            '<p class="cta-panel__body">Most teams have already tried AI. Far fewer have turned it into dependable, everyday work habits. Answer 24 quick statements and find out exactly where your team stands — and the single most useful thing to do next.</p>' +
+            '<p class="sc-intro__gets-label">What you’ll get</p>' +
+            '<ul class="sc-intro__list">' + outcomeList + "</ul>" +
+            '<p class="sc-intro__areas">Measured across six areas: ' + h(areas) + ".</p>" +
+            '<p class="sc-privacy sc-privacy--light">No confidential information needed. Please don’t include sensitive employee, client, legal, or financial data in your answers.</p>' +
           "</div>" +
           '<div class="sc-card sc-form-card">' +
-            '<h3 class="sc-form-card__title">Tell us who’s taking it</h3>' +
+            '<h3 class="sc-form-card__title">Get your personalized result</h3>' +
             '<form id="scParticipant" novalidate>' +
-              field("sc-name", "Name", "text", p.name, true, "Used to personalize your result") +
+              field("sc-name", "Name", "text", p.name, true, "So we can personalize your result") +
               field("sc-role", "Role", "text", p.role, false, "e.g. L&D Lead, Manager, Consultant") +
               field("sc-org", "Organization or team", "text", p.org, false, "") +
-              field("sc-email", "Email", "email", p.email, false, "Optional — you can add it later to save your result") +
+              field("sc-email", "Email", "email", p.email, false, "Optional now — you can email your report at the end") +
               '<p class="sc-error" id="scParticipantError" role="alert" hidden></p>' +
-              '<button type="submit" class="btn btn--primary btn--lg sc-block">Start the scorecard</button>' +
-              '<p class="sc-form-card__note">24 questions · rated 1 (not true) to 5 (very true)</p>' +
+              '<button type="submit" class="btn btn--primary btn--lg sc-block">Start my readiness check</button>' +
+              '<p class="sc-form-card__note">24 questions · rated 1 (not true) to 5 (very true) · about 5 minutes</p>' +
             "</form>" +
           "</div>" +
         "</div>" +
@@ -580,7 +594,7 @@
 
         '<div class="sc-result__foot">' +
           '<button type="button" class="btn btn--ghost" id="scRetake">Retake the scorecard</button>' +
-          '<p class="sc-privacy">Your answers stay in your browser. We don’t collect confidential information.</p>' +
+          '<p class="sc-privacy">Your answers stay in your browser unless you choose to email your report. We don’t collect confidential information.</p>' +
         "</div>" +
 
       "</div>"
@@ -611,30 +625,50 @@
     focusEl("#scResultTitle");
   }
 
-  /* ---- Email capture ---- */
+  /* ---- Email capture (delivers the report via Resend) ---- */
   function renderEmailCapture() {
     if (state.emailRecord) {
       return (
         '<div class="card card--soft sc-email sc-email--done" id="scEmailCard">' +
-          '<h3 class="sc-card-title">Result saved</h3>' +
-          '<p class="sc-success">Thanks — your result has been saved. In the production version, this would also send the report to your email.</p>' +
+          '<div class="sc-email__check" aria-hidden="true">✓</div>' +
+          '<h3 class="sc-card-title">Your report is on its way</h3>' +
+          '<p class="sc-success">We’ve sent your personalized AI Adoption Readiness report to <strong>' + h(state.emailRecord.email) + "</strong>. It can take a minute — if you don’t see it, check your spam or promotions folder.</p>" +
         "</div>"
       );
     }
     return (
       '<div class="card card--soft sc-email" id="scEmailCard">' +
-        '<h3 class="sc-card-title">Send me my result and future practical AI adoption resources</h3>' +
+        '<h3 class="sc-card-title">Email me this report</h3>' +
+        '<p class="sc-email__lead">Get your full result as a branded summary you can revisit later or forward to your manager or team.</p>' +
         '<form id="scEmailForm" novalidate>' +
           '<div class="sc-field">' +
             '<label class="sc-label" for="sc-result-email">Email</label>' +
-            '<input class="sc-input" id="sc-result-email" name="email" type="email" value="' + h(state.participant.email) + '" autocomplete="email">' +
+            '<input class="sc-input" id="sc-result-email" name="email" type="email" value="' + h(state.participant.email) + '" autocomplete="email" placeholder="you@company.com">' +
           "</div>" +
-          '<label class="sc-consent"><input type="checkbox" id="sc-consent"> <span>I agree to receive practical resources from Workflow Adoption Lab. I can unsubscribe at any time.</span></label>' +
+          '<label class="sc-consent"><input type="checkbox" id="sc-consent"> <span>Email me my report and occasional, practical AI adoption resources from Workflow Adoption Lab. I can unsubscribe anytime.</span></label>' +
           '<p class="sc-error" id="scEmailError" role="alert" hidden></p>' +
-          '<button type="submit" class="btn btn--primary sc-block">Save my result</button>' +
+          '<button type="submit" class="btn btn--primary sc-block" id="scEmailSubmit">Send me my report</button>' +
         "</form>" +
       "</div>"
     );
+  }
+
+  // Build the JSON payload the serverless function turns into an email.
+  function buildResultPayload(email, consent) {
+    const r = state.result, p = state.participant;
+    return {
+      name: p.name, role: p.role, org: p.org, email: email, consent: consent, date: r.date,
+      total: r.total,
+      band: { title: r.band.title, description: r.band.description },
+      sections: r.sectionScores.map(function (s) {
+        return { title: s.title, raw: s.raw, pct: s.pct, label: s.label, tone: s.tone };
+      }),
+      strongest: { title: r.strongest.title, raw: r.strongest.raw, label: r.strongest.label },
+      weakest: { title: r.weakest.title, raw: r.weakest.raw, label: r.weakest.label },
+      rec: { action: r.rec.action, experiment: r.rec.experiment },
+      recommendedFocus: r.band.recommendedFocus,
+      kitUrl: KIT_CTA_URL
+    };
   }
 
   function wireEmailCapture() {
@@ -646,15 +680,31 @@
       const consent = form.querySelector("#sc-consent").checked;
       const err = document.getElementById("scEmailError");
       if (!validEmail(email)) { err.textContent = "Please enter a valid email address."; err.hidden = false; return; }
-      if (!consent) { err.textContent = "Please tick the consent box so we can send your result."; err.hidden = false; return; }
+      if (!consent) { err.textContent = "Please tick the box so we can send your report."; err.hidden = false; return; }
+      err.hidden = true;
 
-      // Store locally for this MVP.
-      state.emailRecord = { email: email, consent: true };
-      // TODO (production): send { participant, result, email } to your email
-      // provider (Beehiiv, MailerLite, ConvertKit, etc.) via their API or a
-      // serverless endpoint. Do not expose API keys in client-side code.
-      const card = document.getElementById("scEmailCard");
-      card.outerHTML = renderEmailCapture();
+      const btn = document.getElementById("scEmailSubmit");
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.classList.add("btn--disabled");
+      btn.textContent = "Sending…";
+
+      fetch(RESULT_API_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildResultPayload(email, consent))
+      }).then(function (resp) {
+        if (!resp.ok) { throw new Error("Send failed: " + resp.status); }
+        state.emailRecord = { email: email, consent: true };
+        const card = document.getElementById("scEmailCard");
+        card.outerHTML = renderEmailCapture();
+      }).catch(function () {
+        btn.disabled = false;
+        btn.classList.remove("btn--disabled");
+        btn.textContent = original;
+        err.textContent = "We couldn’t send your report just now. Please try again in a moment.";
+        err.hidden = false;
+      });
     });
   }
 
