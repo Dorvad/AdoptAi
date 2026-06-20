@@ -47,44 +47,158 @@
   <main id="main">
 
     <!-- ===== HERO ===== -->
-    <section class="hero">
-      <div class="container hero__grid">
-        <div class="hero__copy reveal">
-          <span class="eyebrow eyebrow--badge">Facilitator Resource · v2</span>
-          <h1 class="hero__title">Turn AI experimentation into real work habits.</h1>
-          <p class="hero__lead">A ready-to-use workshop kit for facilitators, L&amp;D teams, and managers who want to help teams use AI responsibly, practically, and consistently.</p>
-          <div class="hero__actions">
-            <a href="#pricing" class="btn btn--primary btn--lg">Get the workshop kit</a>
-            <a href="#scorecard" class="btn btn--ghost btn--lg">Download the free scorecard</a>
-          </div>
-          <ul class="hero__meta">
-            <li>Editable slides &amp; facilitator guide</li>
-            <li>90-minute &amp; half-day formats</li>
-            <li>No software required</li>
-          </ul>
+    <section class="hero" aria-label="Introduction">
+
+      <!-- Floating AI-tool logos. These are simplified, stylized brand
+           representations used decoratively in the background. -->
+      <div class="hero__icons" id="heroIcons" aria-hidden="true">
+
+        <!-- ChatGPT (OpenAI) -->
+        <div class="float-chip" style="top:13%;left:9%;--in-delay:0s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:8s;--fdelay:0s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24" fill="#10A37F">
+              <path d="M12 3.2c2.4 1.9 2.4 15.7 0 17.6c-2.4-1.9-2.4-15.7 0-17.6Z"/>
+              <path d="M12 3.2c2.4 1.9 2.4 15.7 0 17.6c-2.4-1.9-2.4-15.7 0-17.6Z" transform="rotate(60 12 12)"/>
+              <path d="M12 3.2c2.4 1.9 2.4 15.7 0 17.6c-2.4-1.9-2.4-15.7 0-17.6Z" transform="rotate(120 12 12)"/>
+            </svg>
+          </div></div>
         </div>
 
-        <!-- Product preview -->
-        <div class="hero__preview reveal" data-reveal-delay="1">
-          <div class="preview-card">
-            <div class="preview-card__head">
-              <span class="micro-label">Workshop Kit</span>
-              <span class="micro-label micro-label--accent">Facilitator Edition</span>
-            </div>
-            <div class="preview-card__title">AI Adoption<br>Workshop Kit</div>
-            <p class="preview-card__sub">From scattered AI tools to consistent, dependable team workflows.</p>
-            <div class="rule"></div>
-            <ul class="preview-card__list">
-              <li><span class="checkbox" aria-hidden="true"></span>Slide deck &amp; facilitator script</li>
-              <li><span class="checkbox" aria-hidden="true"></span>Worksheets &amp; habit trackers</li>
-              <li><span class="checkbox" aria-hidden="true"></span>Adoption scorecard &amp; rubric</li>
-            </ul>
-            <div class="preview-card__foot">
-              <span>38 pages · PDF + editable</span>
-              <span class="preview-card__foot-brand">Workflow Adoption Lab</span>
-            </div>
-          </div>
+        <!-- Claude (Anthropic) -->
+        <div class="float-chip" style="top:20%;right:11%;--in-delay:.08s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:9.5s;--fdelay:.3s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24" fill="#D97757">
+              <rect x="10.9" y="3" width="2.2" height="18" rx="1.1"/>
+              <rect x="10.9" y="3" width="2.2" height="18" rx="1.1" transform="rotate(60 12 12)"/>
+              <rect x="10.9" y="3" width="2.2" height="18" rx="1.1" transform="rotate(120 12 12)"/>
+            </svg>
+          </div></div>
         </div>
+
+        <!-- Google Gemini -->
+        <div class="float-chip float-chip--sm-hide" style="top:10%;left:27%;--in-delay:.16s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:7s;--fdelay:.1s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24">
+              <defs><linearGradient id="ai-gem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4796E3"/><stop offset=".55" stop-color="#9177C7"/><stop offset="1" stop-color="#D56F76"/></linearGradient></defs>
+              <path d="M12 2c.55 5.3 4.7 9.45 10 10c-5.3.55-9.45 4.7-10 10c-.55-5.3-4.7-9.45-10-10c5.3-.55 9.45-4.7 10-10Z" fill="url(#ai-gem)"/>
+            </svg>
+          </div></div>
+        </div>
+
+        <!-- Microsoft Copilot -->
+        <div class="float-chip float-chip--sm-hide" style="top:16%;right:29%;--in-delay:.24s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:10s;--fdelay:.5s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24">
+              <defs><linearGradient id="ai-cop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0078D4"/><stop offset=".5" stop-color="#16C0E0"/><stop offset="1" stop-color="#F25FB0"/></linearGradient></defs>
+              <path d="M10 3c.45 3.85 2.65 6.05 6.5 6.5c-3.85.45-6.05 2.65-6.5 6.5c-.45-3.85-2.65-6.05-6.5-6.5C7.35 9.05 9.55 6.85 10 3Z" fill="url(#ai-cop)"/>
+              <path d="M18 13c.2 1.7 1.1 2.6 2.8 2.8c-1.7.2-2.6 1.1-2.8 2.8c-.2-1.7-1.1-2.6-2.8-2.8c1.7-.2 2.6-1.1 2.8-2.8Z" fill="url(#ai-cop)"/>
+            </svg>
+          </div></div>
+        </div>
+
+        <!-- Notion AI -->
+        <div class="float-chip float-chip--sm-hide" style="top:33%;left:15%;--in-delay:.32s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:8.5s;--fdelay:.2s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24" fill="none" stroke="#0F0F0F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 18V6l10 12V6"/>
+            </svg>
+          </div></div>
+        </div>
+
+        <!-- Grammarly -->
+        <div class="float-chip float-chip--sm-hide" style="top:30%;right:13%;--in-delay:.40s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:7.5s;--fdelay:.6s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24" fill="none" stroke="#15C39A" stroke-width="2.4">
+              <circle cx="12" cy="12" r="8.5"/>
+              <path d="M12 12h5.2" stroke-linecap="round"/>
+            </svg>
+          </div></div>
+        </div>
+
+        <!-- Perplexity -->
+        <div class="float-chip" style="bottom:30%;left:12%;--in-delay:.48s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:9s;--fdelay:.35s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24" fill="none" stroke="#20808D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v18"/>
+              <path d="M12 7.5c-3.3 0-6 1.8-6 4.5s2.7 4.5 6 4.5 6-1.8 6-4.5-2.7-4.5-6-4.5Z"/>
+            </svg>
+          </div></div>
+        </div>
+
+        <!-- Canva -->
+        <div class="float-chip" style="bottom:24%;right:10%;--in-delay:.56s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:8s;--fdelay:.15s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24">
+              <defs><linearGradient id="ai-canva" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00C4CC"/><stop offset="1" stop-color="#7D2AE8"/></linearGradient></defs>
+              <circle cx="12" cy="12" r="10" fill="url(#ai-canva)"/>
+              <path d="M15.5 9.2a3.8 3.8 0 1 0 .2 5.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </div></div>
+        </div>
+
+        <!-- Zoom AI Companion -->
+        <div class="float-chip" style="bottom:13%;left:24%;--in-delay:.64s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:10.5s;--fdelay:.45s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24">
+              <rect x="2" y="2" width="20" height="20" rx="6" fill="#2D8CFF"/>
+              <rect x="6" y="8.5" width="8.5" height="7" rx="2" fill="#fff"/>
+              <path d="M15 11.2l3.2-2.1v5.8L15 12.8z" fill="#fff"/>
+            </svg>
+          </div></div>
+        </div>
+
+        <!-- Otter.ai -->
+        <div class="float-chip" style="bottom:11%;right:26%;--in-delay:.72s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:7.8s;--fdelay:.25s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24" stroke="#1F8FFF" stroke-width="2.4" stroke-linecap="round">
+              <line x1="5" y1="10" x2="5" y2="14"/>
+              <line x1="9.5" y1="6.5" x2="9.5" y2="17.5"/>
+              <line x1="14.5" y1="4.5" x2="14.5" y2="19.5"/>
+              <line x1="19" y1="9" x2="19" y2="15"/>
+            </svg>
+          </div></div>
+        </div>
+
+        <!-- Slack AI -->
+        <div class="float-chip float-chip--sm-hide" style="top:52%;left:5%;--in-delay:.80s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:9.2s;--fdelay:.55s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24">
+              <rect x="10.4" y="2.6" width="3.2" height="8" rx="1.6" fill="#36C5F0"/>
+              <rect x="13.4" y="10.4" width="8" height="3.2" rx="1.6" fill="#2EB67D"/>
+              <rect x="10.4" y="13.4" width="3.2" height="8" rx="1.6" fill="#ECB22E"/>
+              <rect x="2.6" y="10.4" width="8" height="3.2" rx="1.6" fill="#E01E5A"/>
+            </svg>
+          </div></div>
+        </div>
+
+        <!-- Loom AI -->
+        <div class="float-chip float-chip--sm-hide" style="top:55%;right:5%;--in-delay:.88s">
+          <div class="float-chip__repel"><div class="float-chip__inner" style="--fdur:8.8s;--fdelay:.4s">
+            <svg class="float-chip__icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="6" r="2.3" fill="#625DF5"/>
+              <circle cx="17.2" cy="15" r="2.3" fill="#A36BFF"/>
+              <circle cx="6.8" cy="15" r="2.3" fill="#FF6E5C"/>
+            </svg>
+          </div></div>
+        </div>
+
+      </div>
+
+      <div class="hero__glow" aria-hidden="true"></div>
+
+      <div class="container hero__content reveal">
+        <span class="eyebrow eyebrow--badge">Facilitator Resource · v2</span>
+        <h1 class="hero__title">Turn AI experimentation into real work habits.</h1>
+        <p class="hero__lead">A ready-to-use workshop kit for facilitators, L&amp;D teams, and managers who want to help teams use AI responsibly, practically, and consistently.</p>
+        <div class="hero__actions">
+          <a href="#pricing" class="btn btn--primary btn--lg">Get the workshop kit</a>
+          <a href="#scorecard" class="btn btn--ghost btn--lg">Download the free scorecard</a>
+        </div>
+        <ul class="hero__meta">
+          <li>Editable slides &amp; facilitator guide</li>
+          <li>90-minute &amp; half-day formats</li>
+          <li>No software required</li>
+        </ul>
       </div>
     </section>
 
