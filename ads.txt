@@ -1,0 +1,6 @@
+# Aidopt — ads.txt
+# No Google AdSense publisher ID exists yet, so no authorized-seller line is
+# present. (A fake or placeholder ID would fail verification.)
+#
+# TODO: After AdSense approval, add your real publisher line, e.g.:
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

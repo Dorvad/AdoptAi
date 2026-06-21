@@ -1,0 +1,9 @@
+# Aidopt — robots.txt
+# NOTE: replace the domain below with your production domain (see SEO.md).
+User-agent: *
+Allow: /
+
+# Serverless function endpoint — not a page, no need to crawl.
+Disallow: /.netlify/
+
+Sitemap: https://aidopt.com/sitemap.xml
