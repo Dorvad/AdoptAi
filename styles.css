@@ -310,7 +310,15 @@ h1, h2, h3 { font-family: var(--font-head); letter-spacing: -0.02em; }
 }
 
 /* Sparkles on "real work habits" (vanilla SparklesText) */
-.sparkles { position: relative; display: inline-block; white-space: nowrap; }
+.sparkles {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  background: linear-gradient(135deg, var(--sage) 0%, var(--amber) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 .sparkle {
   position: absolute;
   pointer-events: none;
