@@ -24,7 +24,7 @@ homepage URL rather than separate routes.
 
 ## ⚠️ Replace the domain
 
-The production domain is hard-coded as `https://aidopt.com` (placeholder). Search
+The production domain is hard-coded as `https://aidopt.icu` (placeholder). Search
 for it and replace it in:
 
 - `index.html` (canonical, og:url, all JSON-LD `url`/`item` values, og/twitter image)
@@ -41,7 +41,7 @@ template these files.)
 Not used at runtime today (static site), but the intended config is:
 
 ```
-NEXT_PUBLIC_SITE_URL=https://aidopt.com
+NEXT_PUBLIC_SITE_URL=https://aidopt.icu
 NEXT_PUBLIC_PRODUCT_URL=/#pricing
 NEXT_PUBLIC_LEMONSQUEEZY_INDIVIDUAL_URL=https://aidopt.lemonsqueezy.com/checkout/buy/89f782a0-e2e5-4842-9912-964efe34a810?enabled=1817927
 NEXT_PUBLIC_LEMONSQUEEZY_CONSULTANT_URL=https://aidopt.lemonsqueezy.com/checkout/buy/d6375c3c-622f-46ad-a43d-2054dc71e2c0?enabled=1818035
@@ -56,7 +56,7 @@ All three checkout links are wired in `index.html` with the `lemonsqueezy-button
   page's `og:image`/`twitter:image`; not generated here (no OG-image pattern in repo).
 - **Legal review:** `privacy.html`, `terms.html`, `license.html` are practical
   templates with `TODO` markers (retention periods, governing law, refund policy,
-  contact email). Have them reviewed and replace `hello@aidopt.com`.
+  contact email). Have them reviewed and replace `hello@aidopt.icu`.
 - **ads.txt:** no publisher ID was invented. After AdSense approval, add the real
   `google.com, pub-…, DIRECT, …` line (see `ads.txt`).
 - **Resource pages:** the individual resources (checklists, matrices, templates)
@@ -68,7 +68,7 @@ All three checkout links are wired in `index.html` with the `lemonsqueezy-button
 ## Manual steps in Google Search Console / AdSense
 
 1. **Search Console:** add the property (domain or URL-prefix), verify ownership
-   (DNS TXT or the HTML-file/meta-tag method), then submit `https://aidopt.com/sitemap.xml`.
+   (DNS TXT or the HTML-file/meta-tag method), then submit `https://aidopt.icu/sitemap.xml`.
 2. **AdSense:** apply only after the legal pages are finalized and there is enough
    original content. Add the AdSense site, place the verification snippet, and
    after approval add the `ads.txt` line. Then update `privacy.html` → "Google

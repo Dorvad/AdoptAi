@@ -6,4 +6,4 @@ Allow: /
 # Serverless function endpoint — not a page, no need to crawl.
 Disallow: /.netlify/
 
-Sitemap: https://aidopt.com/sitemap.xml
+Sitemap: https://aidopt.icu/sitemap.xml
