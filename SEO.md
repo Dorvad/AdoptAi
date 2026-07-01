@@ -43,7 +43,7 @@ Not used at runtime today (static site), but the intended config is:
 ```
 NEXT_PUBLIC_SITE_URL=https://aidopt.icu
 NEXT_PUBLIC_PRODUCT_URL=/#pricing
-NEXT_PUBLIC_LEMONSQUEEZY_CHECKOUT_URL=https://aidopt.lemonsqueezy.com/checkout/buy/f18c44c1-f35f-4fc4-8896-a716da929b40?embed=1
+NEXT_PUBLIC_LEMONSQUEEZY_CHECKOUT_URL=https://aidopt.lemonsqueezy.com/checkout/buy/813cf8cc-b80b-460a-859a-a386321bdc20?embed=1
 ```
 
 All three checkout links are wired in `index.html` with the `lemonsqueezy-button` class for overlay checkout.
